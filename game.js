@@ -1,6 +1,8 @@
 const canvas = document.getElementById('game');
 const game = canvas.getContext('2d');
-
+let level = 0;
+let hardMap = undefined;
+let lives = 3;
 // Getting the btns for movements
 const upBtn = document.getElementById('up');
 const downBtn = document.getElementById('down');
@@ -28,8 +30,14 @@ class ElementPosition {
     }
 }
 
+class BombPosition extends ElementPosition{
+    transformToExplosion(){
+        hardMap[this.yIndex][this.xIndex] = 'BOMB_COLLISION';
+    }
+}
+
 //  bombs position array
-const bombsPosition = [];
+let bombsPosition = [];
 
 const playerPostion = new ElementPosition();
 const giftPosition = new ElementPosition();
@@ -65,11 +73,14 @@ function startGame() {
 }
 
 function renderMap() {
-    let hardMap = maps[1];
+    bombsPosition.length = 0;
+    hardMap = maps[level];
     // separate the map template by new line character, then erase the first and last element ('cause they're blank elements), then trim to erase whitespaces and finally split each line into an array of characters
         // hardMap = hardMap.split('\n').slice(1,-1).map(el => el.trim()).map(el => el.split(''));
     //another way to achieve it is with regex
-    hardMap = hardMap.match(/[IXO-]+/g).map(el=>el.split(''));
+    if (typeof hardMap === 'string') {
+        hardMap = hardMap.match(/[IXO-]+/g).map(el=>el.split(''));
+    }
     elementsSize = (canvasSize / 10) - 1;
     game.font = elementsSize + 'px Verdana';
     game.textAlign = 'start';
@@ -84,7 +95,7 @@ function renderMap() {
                 giftPosition.xIndex = j;
                 giftPosition.yIndex = i;
             }else if (trItem === '💣') {
-                bombsPosition.push(new ElementPosition(j, i))
+                bombsPosition.push(new BombPosition(j, i))
             }
             game.fillText( trItem, elementsSize*j, elementsSize*(i+1));
         });
@@ -101,22 +112,23 @@ rightBtn.addEventListener('click', () => move('ArrowRight'));
 window.addEventListener('keydown', ({key}) => move(key));
 // Movements functions
 function move(key){
-    switch (key) {
-        case 'ArrowDown':
-            moveDown();
-            break;
-        case 'ArrowUp':
-            moveUp();
-            break;
-        case 'ArrowLeft':
-            moveLeft();
-            break;
-        case 'ArrowRight':
-            moveRight();
-            break;
-        default:
-            console.log("Another key");
-            break;
+    if (lives !== 0)
+        switch (key) {
+            case 'ArrowDown':
+                moveDown();
+                break;
+            case 'ArrowUp':
+                moveUp();
+                break;
+            case 'ArrowLeft':
+                moveLeft();
+                break;
+            case 'ArrowRight':
+                moveRight();
+                break;
+            default:
+                console.log("Another key");
+                break;
     }
 }
 
@@ -148,9 +160,10 @@ function moveRight() {
 function movePlayer(restart = false){
     if (!restart){
         if((playerPostion.xIndex === giftPosition.xIndex) && (playerPostion.yIndex === giftPosition.yIndex)){
+            level += 1;
             modalWin.children[0].children[0].innerText = 'Ganaste!';
             modalWin.classList.remove('inactive');
-        } else if (verifyBomb()){
+        } else if (verifyBomb() && lives === 0){
             modalWin.children[0].children[0].innerText = 'Perdiste!';
             modalWin.classList.remove('inactive');
         }
@@ -160,19 +173,17 @@ function movePlayer(restart = false){
 }
 
 function verifyBomb() {
-    const res = bombsPosition.some(bombPos => {
+    return bombsPosition.some(bombPos => {
         if((bombPos.xIndex === playerPostion.xIndex) && (bombPos.yIndex === playerPostion.yIndex)){
             // Execute the transform to another char 
-            game.fillText('ssss', bombPos.xPos, bombPos.yPos);
-            // Reset player position
-            playerPostion.xPos = 0;
-            playerPostion.yPos = 0;
-            movePlayer(true);
+            bombPos.transformToExplosion();
+            playerPostion.xIndex = 0;
+            playerPostion.yIndex = 0;
+            movePlayer(restart=true);
+            lives -= 1;
             return true;
         }
     });
-
-    return res;
 }
 
 function closeModal(){
