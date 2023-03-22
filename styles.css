@@ -66,12 +66,18 @@ button:not(:last-child) {
     margin-right: 10px;
 }
 
-.messages {
+.lives-container {
     display: flex;
     flex-wrap: wrap;
     margin: 0 auto;
-    width: 80%;
+    width: 20%;
     max-width: 460px;
+    /* border: 1px #2d2d2d solid; */
+    box-shadow: 0px -3px 35px 0px #240127ae;
+    border-radius: 15px;
+    padding: 10px;
+    text-align: center;
+    font-size: 36px;
 }
 
 p {

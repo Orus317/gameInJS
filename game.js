@@ -16,6 +16,9 @@ const modalWin = document.querySelector('.modal-win-card');
 const playAgainBtn = document.getElementById('winBtn') ;
 const exitBtn = document.getElementById('exitBtn');  
 
+// Getting HTML lives container
+const livesText = document.querySelector('.lives-container').children[0];
+
 // Global Position -> It'll be saved
 class ElementPosition {
     constructor (x = undefined, y = undefined){
@@ -81,6 +84,9 @@ function startGame() {
 function renderMap() {
     bombsPosition.length = 0;
     hardMap = hardMap === undefined ? maps[level] : hardMap;
+    livesText.innerText = livesText.innerText === ''
+        ? '💓💓💓'
+        : livesText.innerText;
     // separate the map template by new line character, then erase the first and last element ('cause they're blank elements), then trim to erase whitespaces and finally split each line into an array of characters
         // hardMap = hardMap.split('\n').slice(1,-1).map(el => el.trim()).map(el => el.split(''));
     //another way to achieve it is with regex
@@ -90,21 +96,26 @@ function renderMap() {
     elementsSize = (canvasSize / 10) - 1;
     game.font = elementsSize + 'px Verdana';
     game.textAlign = 'start';
-    hardMap.forEach((row, i) => {
-        row.forEach((item, j) => {
-            const trItem = emojis[item];
-            if (trItem === '🚪' && (playerPostion.xIndex === undefined && playerPostion.yIndex === undefined)){
-                playerPostion.xIndex = j;
-                playerPostion.yIndex = i;
-            }else if (trItem == '🎁') {
-                giftPosition.xIndex = j;
-                giftPosition.yIndex = i;
-            }else if (trItem === '💣') {
-                bombsPosition.push(new BombPosition(j, i))
-            }
-            game.fillText(trItem, elementsSize*j, elementsSize*(i+1));
+    try {
+        hardMap.forEach((row, i) => {
+            row.forEach((item, j) => {
+                const trItem = emojis[item];
+                if (trItem === '🚪' && (playerPostion.xIndex === undefined && playerPostion.yIndex === undefined)){
+                    playerPostion.xIndex = j;
+                    playerPostion.yIndex = i;
+                }else if (trItem == '🎁') {
+                    giftPosition.xIndex = j;
+                    giftPosition.yIndex = i;
+                }else if (trItem === '💣') {
+                    bombsPosition.push(new BombPosition(j, i))
+                }
+                game.fillText(trItem, elementsSize*j, elementsSize*(i+1));
+            });
         });
-    });
+    } catch (TypeError) {
+        console.log('Ganaste!');
+        // winModal()
+    }
     game.fillText(emojis['PLAYER'], playerPostion.xPos, playerPostion.yPos);
 }
 
@@ -118,7 +129,7 @@ window.addEventListener('keydown', ({key}) => move(key));
 // Movements functions
 function move(key){
     // If there are no more lives none key will work to move the player
-    if (lives !== 0)
+    if (lives > 0)
         switch (key) {
             case 'ArrowDown':
                 moveDown();
@@ -168,11 +179,13 @@ function movePlayer(restart = false){
             // when the player wins
             level += 1;
             lives = 3;
+            livesText.innerText = '';
             hardMap = undefined;
             modalWin.children[0].children[0].innerText = 'Ganaste!';
             modalWin.classList.remove('inactive');
         } else if (verifyBomb() && lives === 0){
             // when the player loses
+            gameOver();
             modalWin.children[0].children[0].innerText = 'Perdiste!';
             modalWin.classList.remove('inactive');
         }
@@ -188,17 +201,21 @@ function verifyBomb() {
             bombPos.transformToExplosion();
             playerPostion.restartPosition();
             movePlayer(restart=true);
-            lives -= 1;
+            restLives();
             return true;
         }
     });
 }
 
+function restLives() {
+    lives -= 1;
+    livesText.innerText = `${'💓'.repeat(lives)}${'💔'.repeat(3-lives)}`;
+}
 function closeModal(){
     modalWin.classList.toggle('inactive');
 }
 
 function gameOver() {
-    bombsPosition.map(bombo => bombo.transformToExplosion());
+    bombsPosition.map(bomb => bomb.transformToExplosion());
     movePlayer(true)
 }
