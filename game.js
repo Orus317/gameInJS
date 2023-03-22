@@ -114,6 +114,7 @@ function renderMap() {
         });
     } catch (TypeError) {
         console.log('Ganaste!');
+        alert('Ganaste!!! (falta implementar win-modal :P)')
         // winModal()
     }
     game.fillText(emojis['PLAYER'], playerPostion.xPos, playerPostion.yPos);
