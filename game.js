@@ -113,9 +113,9 @@ function renderMap() {
             });
         });
     } catch (TypeError) {
-        console.log('Ganaste!');
-        alert('Ganaste!!! (falta implementar win-modal :P)')
-        // winModal()
+        modalWin.children[0].children[0].innerText = 'Ganaste!';
+        modalWin.classList.remove('inactive');
+
     }
     game.fillText(emojis['PLAYER'], playerPostion.xPos, playerPostion.yPos);
 }
@@ -177,13 +177,10 @@ function moveRight() {
 function movePlayer(restart = false){
     if (!restart){
         if((playerPostion.xIndex === giftPosition.xIndex) && (playerPostion.yIndex === giftPosition.yIndex)){
-            // when the player wins
             level += 1;
             lives = 3;
             livesText.innerText = '';
             hardMap = undefined;
-            modalWin.children[0].children[0].innerText = 'Ganaste!';
-            modalWin.classList.remove('inactive');
         } else if (verifyBomb() && lives === 0){
             // when the player loses
             gameOver();
@@ -219,4 +216,14 @@ function closeModal(){
 function gameOver() {
     bombsPosition.map(bomb => bomb.transformToExplosion());
     movePlayer(true)
+}
+
+function restartGame(){
+    playerPostion.restartPosition();
+    level=0;
+    lives=3;
+    hardMap = undefined;
+    game.clearRect(0,0,canvasSize,canvasSize);
+    renderMap();
+    closeModal();
 }
