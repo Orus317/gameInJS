@@ -137,7 +137,6 @@ p {
 
 .modal-win-btns #winBtn:hover{
     animation: clickOnBtn 1000ms linear infinite forwards;
-    /* animation: name duration timing-function delay iteration-count direction fill-mode; */
 }
 
 @keyframes clickOnBtn {
