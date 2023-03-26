@@ -35,7 +35,6 @@ canvas {
         "down down";
     place-items: center center;
     row-gap: 10px;
-    margin-top: 20px;
 }
 .btns button {
     cursor: pointer;
@@ -163,10 +162,6 @@ p {
 
 
 @media (max-width: 440px) {
-    button {
-        margin-top: 25px;
-    }
-
     #up,
     #down {
         margin-left: 100%;
