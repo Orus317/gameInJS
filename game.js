@@ -186,7 +186,6 @@ function moveRight() {
 function movePlayer(restart = false){
     // flag to indicate first move
     if (!flagTimer){
-        console.log('object');
         flagTimer = true;
         timeStart = Date.now();
         timeInterval = setInterval(showTime, 100);
@@ -242,6 +241,7 @@ function restartGame(){
     lives = 3;
     flagTimer = false;
     hardMap = undefined;
+    timeTest.innerText = `Time: 00:00:00`;
     game.clearRect(0,0,canvasSize,canvasSize);
     renderMap();
     closeModal();
@@ -250,5 +250,16 @@ function restartGame(){
 const timeTest = document.getElementById('timeTest');
 function showTime() {
     let timeLeft = ((Date.now() - timeStart));
-    timeTest.innerText = `Time: ${timeLeft}`;
+    const minutes = Math.floor(timeLeft/60000);
+    const seconds = Math.floor((timeLeft/1000)%60);
+    const miliseconds = timeLeft % 1000;
+    const res = (
+        "Time: " +
+        (minutes < 100 ? "0" + minutes : minutes) + 
+        ":" +
+        (seconds < 10 ? "0" + seconds : seconds) +
+        ":" +
+        (miliseconds < 10 ? "00" + miliseconds : (miliseconds < 100 ? "0" + miliseconds : miliseconds))
+    );
+    timeTest.innerText = res;
 }
