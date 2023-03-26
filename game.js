@@ -19,6 +19,12 @@ const exitBtn = document.getElementById('exitBtn');
 // Getting HTML lives container
 const livesText = document.querySelector('.lives-container').children[0];
 
+// Setting the flag for interval
+let flagTimer = false;
+let timePlayer;
+let timeInterval;
+let timeStart = undefined;
+
 // Global Position -> It'll be saved
 class ElementPosition {
     constructor (x = undefined, y = undefined){
@@ -113,9 +119,9 @@ function renderMap() {
             });
         });
     } catch (TypeError) {
+        clearInterval(timeInterval);
         modalWin.children[0].children[0].innerText = 'Ganaste!';
         modalWin.classList.remove('inactive');
-
     }
     game.fillText(emojis['PLAYER'], playerPostion.xPos, playerPostion.yPos);
 }
@@ -127,6 +133,9 @@ leftBtn.addEventListener('click', () => move('ArrowLeft'));
 rightBtn.addEventListener('click', () => move('ArrowRight'));
 // Movements for keyboard keys
 window.addEventListener('keydown', ({key}) => move(key));
+
+
+
 // Movements functions
 function move(key){
     // If there are no more lives none key will work to move the player
@@ -175,17 +184,23 @@ function moveRight() {
 }
 
 function movePlayer(restart = false){
+    // flag to indicate first move
+    if (!flagTimer){
+        console.log('object');
+        flagTimer = true;
+        timeStart = Date.now();
+        timeInterval = setInterval(showTime, 100);
+    }
     if (!restart){
         if((playerPostion.xIndex === giftPosition.xIndex) && (playerPostion.yIndex === giftPosition.yIndex)){
+            // when the player passes the level
             level += 1;
             lives = 3;
             livesText.innerText = '';
             hardMap = undefined;
         } else if (verifyBomb() && lives === 0){
             // when the player loses
-            gameOver();
-            modalWin.children[0].children[0].innerText = 'Perdiste!';
-            modalWin.classList.remove('inactive');
+            gameOver();            
         }
     }
     game.clearRect(0,0,canvasSize,canvasSize);
@@ -214,16 +229,26 @@ function closeModal(){
 }
 
 function gameOver() {
+    clearInterval(timeInterval);
+    modalWin.children[0].children[0].innerText = 'Perdiste!';
+    modalWin.classList.remove('inactive');
     bombsPosition.map(bomb => bomb.transformToExplosion());
     movePlayer(true)
 }
 
 function restartGame(){
     playerPostion.restartPosition();
-    level=0;
-    lives=3;
+    level = 0;
+    lives = 3;
+    flagTimer = false;
     hardMap = undefined;
     game.clearRect(0,0,canvasSize,canvasSize);
     renderMap();
     closeModal();
+}
+
+const timeTest = document.getElementById('timeTest');
+function showTime() {
+    let timeLeft = ((Date.now() - timeStart));
+    timeTest.innerText = `Time: ${timeLeft}`;
 }
