@@ -162,10 +162,13 @@ p {
 
 
 @media (max-width: 440px) {
-    #up,
+    .modal-content-container {
+        width: 80%;
+    }
+    /* #up,
     #down {
         margin-left: 100%;
         margin-right: 100%;
-    }
+    } */
 }
 
