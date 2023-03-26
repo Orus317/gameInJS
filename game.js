@@ -238,7 +238,8 @@ function gameOver() {
 function restartGame(){
     playerPostion.restartPosition();
     level = 0;
-    lives = 3;
+    lives = 4;
+    restLives();
     flagTimer = false;
     hardMap = undefined;
     timeTest.innerText = `Time: 00:00:00`;
