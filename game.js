@@ -25,6 +25,9 @@ let timePlayer;
 let timeInterval;
 let timeStart = undefined;
 
+// Getting the HTML tag for the time
+const timeTest = document.getElementById('timeTest');
+
 // Global Position -> It'll be saved
 class ElementPosition {
     constructor (x = undefined, y = undefined){
@@ -119,6 +122,7 @@ function renderMap() {
             });
         });
     } catch (TypeError) {
+        saveRecord(timeTest.innerText);
         clearInterval(timeInterval);
         modalWin.children[0].children[0].innerText = 'Ganaste!';
         modalWin.classList.remove('inactive');
@@ -248,7 +252,6 @@ function restartGame(){
     closeModal();
 }
 
-const timeTest = document.getElementById('timeTest');
 function showTime() {
     let timeLeft = ((Date.now() - timeStart));
     const minutes = Math.floor(timeLeft/60000);
@@ -263,4 +266,12 @@ function showTime() {
         (miliseconds < 10 ? "00" + miliseconds : (miliseconds < 100 ? "0" + miliseconds : miliseconds))
     );
     timeTest.innerText = res;
+}
+
+// Function to save the record in local storage
+function saveRecord(record) {
+    let records = (localStorage.getItem('GAME_RECORD')) ?? [record];
+    records.push(record);
+    localStorage.setItem('GAME_RECORD', record);
+    console.log(currentRecord);
 }
