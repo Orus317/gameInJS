@@ -4,6 +4,7 @@ body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     margin: 0;
     padding: 0;
+    overflow:hidden;
 }
 
 .inactive {
@@ -82,6 +83,7 @@ button:not(:last-child) {
     padding: 10px;
     text-align: center;
     font-size: 36px;
+    margin-bottom: 15px;
 }
 
 p {
@@ -165,14 +167,91 @@ p {
     background-color: rgb(218, 58, 33);
 } */
 
+/* record windows */
+.record-window{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    right: 0;
+    top: 0;
+    width: 220px;
+    background-color: #fff;
+    color: #2d2d2d;
+    border-radius: 0 0 0 15px;
+    padding: 10px 10px 10px 0;
+    transition: all 450ms ease-in;
+}
+
+/* .record-content{
+
+} */
+
+.record-window .arrow-record{
+    background-color: #fff;
+    position: relative;
+    left: -22px;
+    padding: 3px 5px;
+    border-radius: 10px 0 0 10px;
+    cursor: pointer;
+}
+
+.slide-right {
+    transform: translateX(100%);
+}
+
+.arrow-record p {
+    color: #2d2d2d;
+    transition: transform 200ms ease-in;
+}
+
+@keyframes rotateArrow{
+    from {
+        transform: rotate(0deg);
+    } to {
+        transform: rotate(-180deg);
+    }
+}
+
+.rotate-arrow{
+    animation: rotateArrow 150ms ease-in forwards;
+}
+
+.arrow-record:hover p{
+    transform: rotate(-180deg);
+}
+
+.record-window span{
+    display: block;
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+    margin-right: 10px;
+    color: #2d2d2d;
+}
 
 @media (max-width: 440px) {
+    .record-window{
+        padding: 10px 0;
+        width: 28px;  
+    }
+    .record-window .arrow-record{
+        right: 20px;
+    }
+    .record-window span{
+        font-size: 14px;
+    }
+    .arrow-record p{
+        font-size: 14px;
+    }
     .modal-content-container {
         width: 80%;
         height: 40%;
     }
     .game-details{
         flex-direction: row;
+    }
+    .modal-win-btns #winBtn{
+    animation: clickOnBtn 1000ms linear infinite forwards;
     }
 }
 

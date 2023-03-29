@@ -28,6 +28,9 @@ let timeStart = undefined;
 // Getting the HTML tag for the time
 const timeTest = document.getElementById('timeTest');
 
+// Getting the record window
+const recordWindow = document.querySelector('.record-window');
+
 // Global Position -> It'll be saved
 class ElementPosition {
     constructor (x = undefined, y = undefined){
@@ -126,6 +129,7 @@ function renderMap() {
         clearInterval(timeInterval);
         modalWin.children[0].children[0].innerText = 'Ganaste!';
         modalWin.classList.remove('inactive');
+        lives = 0;
     }
     game.fillText(emojis['PLAYER'], playerPostion.xPos, playerPostion.yPos);
 }
@@ -270,8 +274,12 @@ function showTime() {
 
 // Function to save the record in local storage
 function saveRecord(record) {
-    let records = (localStorage.getItem('GAME_RECORD')) ?? [record];
-    records.push(record);
-    localStorage.setItem('GAME_RECORD', record);
-    console.log(currentRecord);
+    let records = JSON.parse(localStorage.getItem('GAME_RECORD'))?.concat(record) ?? [record];
+    console.log(record);
+    console.log(records);
+    localStorage.setItem('GAME_RECORD', JSON.stringify(records));
+}
+// toggleRecordWindow
+function toggleRecordWindow() {
+    recordWindow.classList.toggle('slide-right');
 }
