@@ -19,6 +19,8 @@ const exitBtn = document.getElementById('exitBtn');
 // Getting HTML lives container
 const livesText = document.querySelector('.lives-container').children[0];
 
+
+
 // Setting the flag for interval
 let flagTimer = false;
 let timePlayer;
@@ -91,6 +93,8 @@ function reSizeCanvas() {
 function startGame() {
     sizeCanvas();
     renderMap();
+    if(localStorage.getItem('GAME_RECORD'))
+        writeRecords();
 }
 
 function renderMap() {
@@ -275,11 +279,20 @@ function showTime() {
 // Function to save the record in local storage
 function saveRecord(record) {
     let records = JSON.parse(localStorage.getItem('GAME_RECORD'))?.concat(record) ?? [record];
-    console.log(record);
-    console.log(records);
     localStorage.setItem('GAME_RECORD', JSON.stringify(records));
 }
 // toggleRecordWindow
-function toggleRecordWindow() {
+function toggleRecordWindow(self) {
+    let arrow =  self.children[0];
+    arrow.classList.toggle('rotate-180deg');
     recordWindow.classList.toggle('slide-right');
+    writeRecords();
+}
+
+function writeRecords(){
+    let currentRecords = JSON.parse(localStorage.getItem('GAME_RECORD'));
+    let content = recordWindow.children[2]
+    content.innerHTML = `
+        ${currentRecords.map(rec => `<p>${rec}</p>`).join('')}
+    `;
 }

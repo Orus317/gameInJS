@@ -15,10 +15,11 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    align-content: space-evenly;
     justify-content: space-evenly;
     flex-wrap: wrap;
     height: 100vh;
-    width: 100vw;
+    /* width: 100vw; */
 }
 
 canvas {
@@ -197,27 +198,15 @@ p {
 }
 
 .slide-right {
-    transform: translateX(100%);
+    transform: translateX(80%);
 }
 
 .arrow-record p {
     color: #2d2d2d;
-    transition: transform 200ms ease-in;
+    transition: all 200ms ease-in;
 }
 
-@keyframes rotateArrow{
-    from {
-        transform: rotate(0deg);
-    } to {
-        transform: rotate(-180deg);
-    }
-}
-
-.rotate-arrow{
-    animation: rotateArrow 150ms ease-in forwards;
-}
-
-.arrow-record:hover p{
+.rotate-180deg{
     transform: rotate(-180deg);
 }
 
@@ -226,6 +215,7 @@ p {
     writing-mode: vertical-lr;
     transform: rotate(180deg);
     margin-right: 10px;
+    margin-left: -10px;
     color: #2d2d2d;
 }
 
