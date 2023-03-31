@@ -292,7 +292,9 @@ function toggleRecordWindow(self) {
 function writeRecords(){
     let currentRecords = JSON.parse(localStorage.getItem('GAME_RECORD'));
     let content = recordWindow.children[2]
-    content.innerHTML = `
-        ${currentRecords.map(rec => `<p>${rec}</p>`).join('')}
+    content.innerHTML == currentRecords 
+    ? 'Aún no hay records registrados :c' 
+    :`
+        ${currentRecords?.map(rec => `<p>${rec}</p>`).join('')}
     `;
 }

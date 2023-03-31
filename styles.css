@@ -4,7 +4,9 @@ body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     margin: 0;
     padding: 0;
-    overflow:hidden;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
 }
 
 .inactive {
@@ -116,7 +118,6 @@ p {
     background-color: #3b2a3f;
     border-radius: 50px;
     box-shadow: rgba(204, 204, 204, 0.25) 0px 54px 55px;
-
 }
 
 .modal-win-card p {
@@ -169,24 +170,23 @@ p {
 } */
 
 /* record windows */
-.record-window{
+.record-window-container{
     position: absolute;
-    display: flex;
-    align-items: center;
-    box-sizing: border-box;
     right: 0;
     top: 0;
     width: 220px;
+}
+
+.record-window{
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
     background-color: #fff;
     color: #2d2d2d;
     border-radius: 0 0 0 15px;
     padding: 10px 10px 10px 0;
     transition: all 450ms ease-in;
 }
-
-/* .record-content{
-
-} */
 
 .record-window .arrow-record{
     background-color: #fff;
@@ -199,6 +199,13 @@ p {
 
 .slide-right {
     transform: translateX(80%);
+}
+
+@keyframes slideRight{
+    0%{
+        transform: scale(1);
+    }
+
 }
 
 .arrow-record p {
@@ -220,18 +227,23 @@ p {
 }
 
 @media (max-width: 440px) {
+    .record-window-container{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: end;
+        overflow: hidden;
+    }
     .record-window{
-        padding: 10px 0;
-        width: 28px;  
+        width: 130px;
+        height: 10%;
+        font-size: 12px;
     }
     .record-window .arrow-record{
-        right: 20px;
-    }
-    .record-window span{
-        font-size: 14px;
+        left: -15px;
     }
     .arrow-record p{
-        font-size: 14px;
+        font-size: 12px;
     }
     .modal-content-container {
         width: 80%;
