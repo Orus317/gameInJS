@@ -131,6 +131,7 @@ function renderMap() {
     } catch (TypeError) {
         saveRecord(timeTest.innerText);
         clearInterval(timeInterval);
+        writeRecords();
         modalWin.children[0].children[0].innerText = 'Ganaste!';
         modalWin.classList.remove('inactive');
         lives = 0;
@@ -291,10 +292,8 @@ function toggleRecordWindow(self) {
 
 function writeRecords(){
     let currentRecords = JSON.parse(localStorage.getItem('GAME_RECORD'));
-    let content = recordWindow.children[2]
-    content.innerHTML == currentRecords 
-    ? 'Aún no hay records registrados :c' 
-    :`
-        ${currentRecords?.map(rec => `<p>${rec}</p>`).join('')}
-    `;
+    let content = recordWindow.children[2];
+    content.innerHTML = currentRecords === null
+    ? '<p>Aún no hay records registrados :c</p>' 
+    :`${currentRecords?.map(rec => `<p>${rec}</p>`).join('')}`;
 }
